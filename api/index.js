@@ -22,9 +22,69 @@ mongoose.connect(process.env.MONGO_URL, {
     console.error(err);
   });
 
-app.listen(5000, () => {
-  console.log('SERVER RUNS ON 5000')
+app.put('/signupCollection/update', async (req, res) => {
+  const newOwnerName = req.body.newOwnerName;
+  const id = req.body.id;
+  // console.log('Req', req)
+  try {
+    await NFTCollection.findOneAndUpdate({ _id: id }, { ownerName: newOwnerName })
+  } catch (e) {
+    console.log(e)
+  }
 })
+app.post('/signupCollection', async (req, res) => {
+  let newCollection = new NFTCollection({
+    NFTCollection: req.body.NFTCollection,
+    ownerName: req.body.ownerName,
+    addressCrypto: req.body.addressCrypto,
+    image: req.body.image,
+    assets: req.body.assets
+  })
+
+  try {
+    await newCollection.save()
+    res.send(JSON)
+  } catch (err) {
+    console.log(err)
+  }
+  // this._basicLogger.info(`Added ${name} into ${collectionID}`)
+  // this._cloudLogger.info(`Added ${name} into ${collectionID}`)
+})
+
+app.get('/signupCollection', async (req, res) => {
+  NFTCollection.find({}, (err, result) => {
+    if (err) {
+      res.send(err)
+    }
+    res.send(result)
+  });
+})
+
+app.delete('/signupCollection/delete/:id', async (req, res) => {
+  const id = req.params.id
+  await NFTCollection.findByIdAndRemove(id).exec();
+  res.send('deleted')
+})
+
+
+
+app.delete('/signup/delete/:id', async (req, res) => {
+  const id = req.params.id
+  await Asset.findByIdAndRemove(id).exec();
+  res.send('deleted')
+})
+
+app.put('/signup/update', async (req, res) => {
+  const newOwnerName = req.body.newOwnerName;
+  const id = req.body.id;
+  // console.log('Req', req)
+  try {
+    await Asset.findOneAndUpdate({ _id: id }, { username: newOwnerName })
+  } catch (e) {
+    console.log(e)
+  }
+})
+
 
 app.get('/express_backend', (req, res) => {
   res.send({ express: 'UPDATED' });
@@ -74,30 +134,7 @@ app.get('/signupCollection', cors(), async (req, res) => {
 })
 
 // app.post('/signupCollection', cors(), async (req, res) => {
-app.post('/NFTCollection/:id/asset', async (req, res) => {
-  const { id } = req.params;
-  const NFTCollection = await NFTCollection.findById(id);
-  const { fullname, username, email } = req.body;
-  const asset = new Asset({ fullname, username, email });
-  NFTCollection.assets.push(asset);
-  asset.NFTCollection = asset;
-  res.send(asset)
-  // console.log(req.body)
-  // let newCollection = new Collection({
-  //   NFTCollection: req.body.NFTCollection,
-  //   ownerName: req.body.ownerName,
-  //   addressCrypto: req.body.addressCrypto,
-  //   image: req.body.image,
-  //   assets: req.body.assets
-  // })
 
-  // const newCollection = new NFTCollection(req.body);
-  // await newCollection.save()
-  // res.send(JSON)
-  // this._basicLogger.info(`Added ${name} into ${collectionID}`)
-  // this._cloudLogger.info(`Added ${name} into ${collectionID}`)
-
-})
 /*
 
 // Updating One
@@ -127,11 +164,12 @@ router.delete('/:id', getSubscriber, async (req, res) => {
 })
 
 */
-app.get('/', async (req, res) => {
-  res.send('home')
-})
 
 
 app.get('/market', async (req, res) => {
   res.send('market')
+})
+
+app.listen(5000, () => {
+  console.log('SERVER RUNS ON 5000')
 })

@@ -133,6 +133,18 @@ app.get('/signupCollection', cors(), async (req, res) => {
     })
 })
 
+/*
+const user = await User.findById(id);
+user.addresses.push(
+  {
+    street: '99',
+    city: 'New York',
+    state: 'NY',
+    country: 'USA'
+  }
+)
+*/
+
 // app.post('/signupCollection', cors(), async (req, res) => {
 
 /*

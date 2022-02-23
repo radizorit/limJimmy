@@ -6,8 +6,7 @@ const CollectionSchema = new Schema({
     ownerName: String,
     addressCrypto: String,
     image: String,
-    assets: String
-    // assets: [{ type: Schema.Types.ObjectId, ref: 'Asset' }]
+    assets: [{ type: Schema.Types.ObjectId, ref: 'Asset' }]
 })
 
 module.exports = mongoose.model('NFTCollection', CollectionSchema)

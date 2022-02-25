@@ -3,8 +3,10 @@ const Schema = mongoose.Schema;
 
 const FloorSchema = new Schema({
     collectionName: String,
-    dateOfFloor: String,
+    dateOfFloor: Date,
     floor: Number,
+    priceOfETH: Number,
+    priceOfAssetDollars: Number
 })
 
 module.exports = mongoose.model('Floor', FloorSchema)

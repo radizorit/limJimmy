@@ -4,7 +4,9 @@ module.exports.createFloor = async (req, res) => {
     const newFloor = new Floor({
         collectionName: req.body.collectionName,
         dateOfFloor: req.body.dateOfFloor,
-        floor: req.body.floor
+        floor: req.body.floor,
+        priceOfETH: req.body.priceOfETH,
+        priceOfAssetDollars: req.body.priceOfAssetDollars
     });
     try {
         await newFloor.save()

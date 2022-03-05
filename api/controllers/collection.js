@@ -1,5 +1,6 @@
-
+const mongoose = require('mongoose')
 const NFTCollection = require('../models/collection')
+const toId = mongoose.Types.ObjectId
 
 module.exports.createCollection = async (req, res) => {
     const newCollection = new NFTCollection({
@@ -53,12 +54,13 @@ module.exports.deleteCollection = async (req, res) => {
 }
 
 module.exports.getOneCollection = async (req, res) => {
-    const { id } = req.params
+    let result = {}
     try {
-        await NFTCollection.findById(id)
-            .then(collection => console.log(collection))
-            .catch(err => res.status(400).json('Error: ' + err))
+        let result = await NFTCollection.find({ _id: req.params.id })
+        //docs say to use req.prams.id
+        res.status(200).json(result)
     } catch (e) {
         console.log(e)
     }
 }
+

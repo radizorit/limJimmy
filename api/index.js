@@ -20,7 +20,7 @@ app.use('/', NFTCollectionRoute)
 app.use('/', AssetRoute)
 
 
-//jlimanalysis@gmail.com
+//jlimanalysis@gmail.com 
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -33,18 +33,6 @@ mongoose.connect(process.env.MONGO_URL, {
 app.get('/express_backend', (req, res) => {
   res.send({ express: 'UPDATED' });
 });
-
-/*
-const user = await User.findById(id);
-user.addresses.push(
-  {
-    street: '99',
-    city: 'New York',
-    state: 'NY',
-    country: 'USA'
-  }
-)
-*/
 
 app.get('/market', async (req, res) => {
   res.send('market')

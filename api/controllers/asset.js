@@ -25,7 +25,7 @@ module.exports.updateAsset = async (req, res) => {
 module.exports.getAllAsset = async (req, res) => {
     Asset.find({})
         .then((data) => {
-            console.log('Data: ', data)
+            // console.log('Data: ', data)
             res.json(data)
         })
         .catch((error) => {

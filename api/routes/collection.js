@@ -13,14 +13,18 @@ const {
     , getOneCollection
 } = require('../controllers/collection')
 
-router.route('/signupCollection')
-    .post(createCollection)
-    .get(getAllCollection)
+router.route('/signupCollection/:id')
     .put(changeCollection)
     .delete(deleteCollection)
-
+// .get(getOneCollection)
 
 router.route('/signupCollection/:id')
     .get(getOneCollection)
+
+router.route('/signupCollection')
+    .post(createCollection)
+    .get(getAllCollection)
+
+
 
 module.exports = router

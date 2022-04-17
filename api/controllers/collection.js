@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const NFTCollection = require('../models/collection')
-const toId = mongoose.Types.ObjectId
 
 module.exports.createCollection = async (req, res) => {
     const newCollection = new NFTCollection({

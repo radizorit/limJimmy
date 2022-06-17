@@ -1,23 +1,17 @@
-//entry point for api, used to start API
-const dotenv = require("dotenv");
+const dotenv = require('dotenv')
 const express = require('express');
 const app = express();
 const cors = require('cors')
 
-const mongoose = require('mongoose');
-
-const NFTCollectionRoute = require('./routes/collection')
-const AssetRoute = require('./routes/asset')
-const FloorRoute = require('./routes/floor')
-
+// require('dotenv').config()
 dotenv.config()
+// require('dotenv').config()
+const mongoose = require('mongoose')
 
-app.use(express.json()); //parsing the json (need to do this with anything that involves the body or else it wont work)
+const CommunicationRoute = require('./routes/communications')
+
+app.use(express.json());
 app.use(cors())
-
-app.use('/', FloorRoute)
-app.use('/', NFTCollectionRoute)
-app.use('/', AssetRoute)
 
 
 //jlimanalysis@gmail.com 
@@ -37,6 +31,8 @@ app.get('/express_backend', (req, res) => {
 app.get('/market', async (req, res) => {
   res.send('market')
 })
+
+app.use('/', CommunicationRoute)
 
 app.listen(5000, () => {
   console.log('SERVER RUNS ON 5000')

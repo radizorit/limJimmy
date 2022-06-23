@@ -11,6 +11,7 @@ const https = require('https')
 // const http = require('http')
 const MessageRoute = require('./routes/message')
 const SubscribeRoute = require('./routes/subscribe')
+const WebhookRoute = require('./routes/webhooks')
 
 const bodyParser = require('body-parser');
 
@@ -20,6 +21,7 @@ app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', MessageRoute)
 app.use('/', SubscribeRoute)
+app.use('/', WebhookRoute)
 
 
 //jlimanalysis@gmail.com 
@@ -48,7 +50,8 @@ app.all('/sms', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/xml' });
   res.end(twiml.toString());
 })
+let port = 3000
 
-app.listen(5000, () => {
-  console.log('SERVER RUNS ON 5000')
+app.listen(port, () => {
+  console.log(`SERVER RUNS ON ${port}`)
 })

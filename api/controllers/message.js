@@ -13,11 +13,12 @@ module.exports.changeMessageStatus = async (req, res) => {
 
     //then using the put request you will send something to DB to change status to true, make sure we are updating only ONE field
     //mongodb find
-    try {
-        await Message.find({ sid: sidMsg }, { status: true })
-    } catch (err) {
-        console.error(err)
-    }
+    // try {
+    //     //change status to string
+    //     await Message.find({ sid: sidMsg }, { status: true })
+    // } catch (err) {
+    //     console.error(err)
+    // }
 
 }
 module.exports.createMessage = async (req, res) => {
@@ -35,23 +36,11 @@ module.exports.createMessage = async (req, res) => {
                 //possibly have a function here if?
                 //also how do we know the message sent?
                 // to: '+1' + response.destination
-                // statusCallBack: 'https://6d6d-47-41-207-79.ngrok.io',
                 statusCallback: 'https://limjimmy.com/webhooks/twilio/sms',
                 to: '+16267823475'
                 //change "newMessage" sid from empty string to message.sid
             })
-        try {
-            newMessage = new Message({
-                name: req.body.name,
-                message: req.body.message,
-                communication: req.body.communication,
-                timeStamp: req.body.timeStamp,
-                sid: twilioStatus['sid'],
-                status: false
-            })
-        } catch (err) {
-            console.log('I cant create this dam newMessage', err)
-        }
+
         // .then(message => console.log(message))
         // console.log(twilioStatus)
         // const callLog = await client.messages.list({ limit: 20 })
@@ -80,7 +69,18 @@ module.exports.createMessage = async (req, res) => {
         console.error('Failed to send to Twilio', err)
         return res.status(500).send('Failed to send using Twilio')
     }
-
+    try {
+        newMessage = new Message({
+            name: req.body.name,
+            message: req.body.message,
+            communication: req.body.communication,
+            timeStamp: req.body.timeStamp,
+            sid: twilioStatus['sid'],
+            status: false
+        })
+    } catch (err) {
+        console.log('I cant create this dam newMessage', err)
+    }
     //api --> routes --> controllers --> communicate with different models/db as well as other external services (twilio for example)
     try {
         await newMessage.save()
@@ -99,3 +99,23 @@ module.exports.getAllMessage = async (req, res) => {
         console.error('error', err)
     }
 }
+
+
+
+/*
+to upload to git
+//edit code here in window editor
+//update to github
+//ec2 download from github
+//upload you gotta be in the correct directory in terminal
+    //limjimmy (locally and ec2)
+        
+        HOW TO ADD VERY IMPORTANT    
+            //git add .
+            //git commit -m "whatever message in quotes"
+            //git push -u origin dev
+        EC2 PULL
+            //git pull
+            
+
+*/

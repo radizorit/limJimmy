@@ -15,9 +15,16 @@ module.exports.createSubscription = async (req, res) => {
     } catch (err) {
         console.log('controllers error', err)
     }
+
 }
 
 module.exports.getAllSubscription = async (req, res) => {
-    let data = await Subscribe.find({})
-    res.json(data)
+    Subscribe.find({})
+        .then((data) => {
+            // console.log('Data: ', data)
+            res.json(data)
+        })
+        .catch((error) => {
+            console.log('error:', error)
+        })
 }

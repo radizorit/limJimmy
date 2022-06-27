@@ -1,11 +1,12 @@
+const Message = require('../models/message');
 
 module.exports.handleTwilioSms = async (req, res) => {
-    try {
-        console.log(req.body)
-        res.status(204).send()
-        // let data = await Message.find({})
-        // return res.json(data)
-    } catch (err) {
-        console.error('error', err)
+    if (req.body['MessageStatus'] === 'delivered') {
+        try {
+            await Message.findOneAndUpdate({ 'sid': req.body['SmsSid'] }, { $set: { 'status': 'delivered' } })
+            res.status(204).send()
+        } catch (e) {
+            console.error('failed to update db', e)
+        }
     }
 }

@@ -45,7 +45,6 @@ app.get('/market', async (req, res) => {
 
 app.all('/sms', (req, res) => {
   const twiml = new MessagingResponse();
-
   twiml.message('This is a proper response');
   res.writeHead(200, { 'Content-Type': 'text/xml' });
   res.end(twiml.toString());

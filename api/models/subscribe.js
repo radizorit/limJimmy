@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 const SubscribeSchema = new Schema({
+    login: String,
     name: String,
     phone: Number,
     email: String,
@@ -11,6 +12,11 @@ const SubscribeSchema = new Schema({
 })
 
 module.exports = mongoose.model('Subscribe', SubscribeSchema)
+
+
+//define the name of the schema
+//what is going into the schema
+//what are the use cases of post, get, delete, patch
 
 //add save function
 //define model

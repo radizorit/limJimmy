@@ -4,11 +4,7 @@ const router = express.Router();
 const {
     createMessage,
     getAllMessage,
-    changeMessageStatus
 } = require('../controllers/message')
-
-router.route('/communications/message')
-    .put(changeMessageStatus)
 
 router.route('/communications/message')
     .post(createMessage)

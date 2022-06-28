@@ -1,8 +1,16 @@
 const Message = require('../models/message');
 const sendTwilio = require('../modules/twilio')
+const { messageSchema } = require('../helpers/validationSchema')
 
 module.exports.createMessage = async (req, res) => {
     let message = req.body, twilioMsg
+    const { error } = messageSchema.validate(req.body);
+
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new Error(msg, 400)
+    }
+
     try {
         twilioMsg = await sendTwilio(message)
     } catch (e) {
@@ -35,9 +43,9 @@ module.exports.createMessage = async (req, res) => {
     //create message will then send the data 
 }
 
-module.exports.editMessage = async (req, res) => {
+// module.exports.editMessage = async (req, res) => {
 
-}
+// }
 
 module.exports.getAllMessage = async (req, res) => {
     try {

@@ -3,11 +3,11 @@ const router = express.Router();
 
 //specify all webhook routes
 const {
-    handleTwilioSms
-} = require('../controllers/twilio')
+    updateTwilioSms
+} = require('../controllers/webhookTwilio')
 
 router.route('/webhooks/twilio/sms')
-    .post(handleTwilioSms)
+    .post(updateTwilioSms)
 
 //create another endpoint like limJimmy/webhooks/twilio -->
 // THEN ADD THIS TWILIO

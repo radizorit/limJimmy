@@ -1,19 +1,36 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema;
+module.exports = class Subscribe {
+    constructor() {
+        this.data = {
+            _id: String,
+            name: String,
+            login: String,
+            phone: Number,
+            email: String,
+            password: String,
+            signUpDate: String,
+            referral: String,
+        }
+    }
 
-const SubscribeSchema = new Schema({
-    login: String,
-    name: String,
-    phone: Number,
-    email: String,
-    password: String,
-    referral: String,
-    timeStamp: Date
-})
-
-module.exports = mongoose.model('Subscribe', SubscribeSchema)
-
-
+    async createSubscription({ _id, name, login, phone, email, password,
+        signUpDate, referral }) {
+        //why are we doing this?
+        //possible data manipulation most likely done here?
+        this.data = {
+            // ...this.data,
+            // signUpDate: Date.now()
+            id: _id,
+            name: name,
+            login: login,
+            phone: phone,
+            email: email,
+            password: password,
+            signUpDate: signUpDate,
+            referral: referral
+        }
+        return this.data
+    }
+}
 //define the name of the schema
 //what is going into the schema
 //what are the use cases of post, get, delete, patch

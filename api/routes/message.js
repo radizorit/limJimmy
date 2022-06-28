@@ -9,8 +9,8 @@ const {
 router.route('/communications/message')
     .post(createMessage)
 
-router.route('/communications/message')
-    .get(getAllMessage)
+// router.route('/communications/message')
+//     .get(getAllMessage)
 
 module.exports = router
 //need delete and put routes

@@ -1,32 +1,14 @@
 const Message = require('../models/message');
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema;
 const sendTwilio = require('../modules/twilio')
 
 module.exports.createMessage = async (req, res) => {
-    //set up schema
-    let twilioMsg
-    let messageSchema = new Schema({
-        id: String,
-        name: String,
-        message: String,
-        communication: String,
-        timeStamp: Date,
-        sid: String,
-        status: String,
-        author: String
-    })
-    let messageModel = mongoose.model('Message', messageSchema)
-
-    let message = req.body
+    let message = req.body, twilioMsg
     try {
         twilioMsg = await sendTwilio(message)
     } catch (e) {
-        console.log('problems sending twilio in controller', e)
+        console.log('problems with the sending twilio in controller', e)
     }
-
-    //create message
-    let postMessage = new messageModel({
+    let postMessage = new Message({
         id: message.id,
         name: message.name,
         message: message.message,
@@ -48,16 +30,13 @@ module.exports.createMessage = async (req, res) => {
     } catch (e) {
         console.error('unable to send', e)
     }
+    //set up schema in constructor
+    //you will be needing to identify and add model to constructor
+    //create message will then send the data 
 }
 
 module.exports.editMessage = async (req, res) => {
-    try {
-        console.log('editted')
-        // let data = await Message.find(sid)
-        // return res.json(data)
-    } catch (e) {
-        console.error('error', e)
-    }
+
 }
 
 module.exports.getAllMessage = async (req, res) => {

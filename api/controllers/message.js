@@ -16,6 +16,7 @@ module.exports.createMessage = async (req, res) => {
     } catch (e) {
         console.log('problems with the sending twilio in controller', e)
     }
+    //Message should be a ADAPTER connection
     let postMessage = new Message({
         id: message.id,
         name: message.name,

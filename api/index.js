@@ -8,7 +8,7 @@ dotenv.config()
 const mongoose = require('mongoose')
 
 const https = require('https')
-// const http = require('http')
+// const http = require('http')//connect before starting server
 const MessageRoute = require('./routes/message')
 const SubscribeRoute = require('./routes/subscribe')
 const WebhookRoute = require('./routes/webhooks')
@@ -34,6 +34,7 @@ mongoose.connect(process.env.MONGO_URL, {
     console.error(err);
   });
 
+
 app.get('/express_backend', (req, res) => {
   res.send({ express: 'UPDATED' });
 });
@@ -42,13 +43,13 @@ app.get('/market', async (req, res) => {
   res.send('market')
 })
 
-
 app.all('/sms', (req, res) => {
   const twiml = new MessagingResponse();
   twiml.message('This is a proper response');
   res.writeHead(200, { 'Content-Type': 'text/xml' });
   res.end(twiml.toString());
 })
+
 let port = 5000
 
 app.listen(port, () => {

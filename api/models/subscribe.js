@@ -1,3 +1,5 @@
+const { get } = require('../adapters/mongoConnection')
+
 module.exports = class Subscribe {
     constructor() {
         this.data = {
@@ -17,8 +19,6 @@ module.exports = class Subscribe {
         //why are we doing this?
         //possible data manipulation most likely done here?
         this.data = {
-            // ...this.data,
-            // signUpDate: Date.now()
             id: _id,
             name: name,
             login: login,
@@ -28,6 +28,11 @@ module.exports = class Subscribe {
             signUpDate: signUpDate,
             referral: referral
         }
+        let client = await get();
+        let db = client.db('communications').collection('subscribes');
+        // let collection = db.collection('messages')
+        db.insertOne(this.data)
+
         return this.data
     }
 }

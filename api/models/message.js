@@ -1,7 +1,8 @@
-module.exports = new class Message {
+const { get } = require('../adapters/mongoConnection')
+module.exports = class Message {
     constructor() {
         this.data = {
-            id: String,
+            _id: String,
             name: String,
             message: String,
             communication: String,
@@ -18,7 +19,7 @@ module.exports = new class Message {
 
     async createMessage({ _id, name, message, timeStamp, communication, sid, author }) {
         this.data = {
-            id: _id,
+            _id: _id,
             name: name,
             message: message,
             communication: communication,
@@ -27,52 +28,41 @@ module.exports = new class Message {
             status: 'queue',
             author: author
         }
+
+        let client = await get();
+        let db = client.db('communications').collection('messages');
+        // let collection = db.collection('messages')
+        db.insertOne(this.data)
+
         return this.data
     }
 
-    async updateMessageAfterSMS({ _id, name, message, timeStamp, communication, sid, status, author }) {
-        //call the twilioSMS function
-        //set the response (sid and delivered) to a variable
-        //use sid to know what to update
-        //update delivery status
-        //update sid
-
-        //update sid and delivery status? 
+    async getAllMessages() {
+        console.log('model is hit')
+        // let client = await get();
+        // let db = client.db('communications').collection('messages');
+        // //connection might be wrong
+        // //look here
+        // //need to send res.json on controllers side
+        // return await db.find({})
     }
 
-    // async load({ }) {
-    //return result
-    // }
+    // // async load({ }) {
+    // //return result
+    // // }
 
 
-    //update sid and delivery status? 
-    //create function
+    // //update sid and delivery status? 
+    // //create function
 
-    //get function
+    // //get function
 
-    //delete function
+    // //delete function
 
-    //put function
+    // //put function
 
-    //read function
-    //sentTime function
-    //delivered time function
-    //etc. but probably not as important
+    // //read function
+    // //sentTime function
+    // //delivered time function
+    // //etc. but probably not as important
 }
-
-
-// const mongoose = require('mongoose')
-// const Schema = mongoose.Schema;
-
-// const MessageSchema = new Schema({
-//     id: String,
-//     name: String,
-//     message: String,
-//     communication: String,
-//     timeStamp: Date,
-//     sid: String,
-//     status: String,
-//     author: String
-// })
-
-// module.exports = mongoose.model('Message', MessageSchema)

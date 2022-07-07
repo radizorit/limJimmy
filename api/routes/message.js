@@ -3,14 +3,14 @@ const router = express.Router();
 
 const {
     createMessage,
-    getAllMessage,
+    getAllMessages,
 } = require('../controllers/message')
 
-router.route('/communications/message')
+router.route('/api/1/communications/message/create')
     .post(createMessage)
 
-// router.route('/communications/message')
-//     .get(getAllMessage)
+router.route('/api/1/communications/message/get')
+    .get(getAllMessages)
 
 module.exports = router
 //need delete and put routes

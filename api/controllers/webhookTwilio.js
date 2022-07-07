@@ -1,12 +1,13 @@
-const Message = require('../models/message');
-const editMessage = require('./message')
+const { get } = require('../adapters/mongoConnection')
 module.exports.updateTwilioSms = async (req, res) => {
     if (req.body['MessageStatus'] === 'delivered') {
         try {
-            deliveredMessage = await Message.findOneAndUpdate({ 'sid': req.body['SmsSid'] }, { $set: { 'status': 'delivered' } })
+            let client = await get();
+            let db = client.db('communications')
+            let collection = db.collection('messages')
+            deliveredMessage = await collection.findOneAndUpdate({ 'sid': req.body['SmsSid'] }, { $set: { 'status': 'delivered' } })
         } catch (e) {
             console.error('ONE failed to update db')
         }
     }
-    editMessage
 }

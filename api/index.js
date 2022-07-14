@@ -11,7 +11,8 @@ const mongo = require('./adapters/mongoConnection')
 const https = require('https')
 // const http = require('http')//connect before starting server
 const MessageRoute = require('./routes/message')
-const SubscribeRoute = require('./routes/subscribe')
+const UserRoute = require('./routes/user')
+const AuthRoute = require('./routes/auth')
 const WebhookRoute = require('./routes/webhooks')
 
 const bodyParser = require('body-parser');
@@ -21,25 +22,12 @@ app.use(cors())
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', MessageRoute)
-app.use('/', SubscribeRoute)
+app.use('/', UserRoute)
 app.use('/', WebhookRoute)
+app.use('/', AuthRoute)
 
 
 //jlimanalysis@gmail.com 
-// let port = 5000
-// MongoClient.connect(process.env.MONGO_URL, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true
-// })
-//   .then(() => {
-//     app.listen(port, () => {
-//       console.log(`SERVER RUNS ON ${port}`)
-//     })
-//   })
-//   .then(() => console.log('DB Connection Succesful'))
-//   .catch((err) => {
-//     console.error(err);
-//   });
 
 let port = 5000
 

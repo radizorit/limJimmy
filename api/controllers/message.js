@@ -1,9 +1,47 @@
 const Message = require('../models/message');
 const sendTwilio = require('../adapters/twilio')
 const { messageSchema } = require('../helpers/validationSchema');
-const { get } = require('../adapters/mongoConnection')
+const { ObjectId } = require('mongodb');
 
-//need to do delete and put
+module.exports.updateMessage = async (req, res) => {
+    try {
+        console.log(req.body, 'body')
+
+        let id = req.params.id
+        // console.log(id)
+        let message = new Message()
+        let connection = await message.updateMessage()
+
+        // await connection.updateOne({ _id: ObjectId(id) }, { $set: { name: req.body.name } });
+        //basically you just have to identify the front end which is what is req.body.name or equivalent to it? so probably consoel.log(req.params. lol)
+        await connection.updateOne({ _id: ObjectId(id) }, {
+            $set: {
+                name: req.body.name,
+                message: req.body.message,
+                communication: req.body.communication,
+                timeStamp: req.body.timeStamp,
+                sid: req.body.sid,
+                status: req.body.status,
+                author: req.body.author
+            }
+        });
+        console.log('update completed from controllers')
+    } catch (e) {
+        console.error(e, 'controllers error deleting')
+    }
+}
+
+module.exports.deleteMessage = async (req, res) => {
+    try {
+        let id = req.params.id
+        let message = new Message()
+        let connection = await message.deleteMessage()
+        await connection.deleteOne({ "_id": ObjectId(id) });
+    } catch (e) {
+        console.error(e, 'controllers error deleting')
+    }
+}
+
 module.exports.createMessage = async (req, res) => {
     let message = req.body, twilioMsg, postMessage
     const { error } = messageSchema.validate(req.body);
@@ -37,27 +75,20 @@ module.exports.createMessage = async (req, res) => {
 }
 
 module.exports.getAllMessages = async (req, res) => {
-    try {
-        // let message = new Message()
-        // message.getAllMessages();
-        let client = await get();
-        // console.log('client',client)
-        client
-            .db('communications')
-            .collection('messages')
-            .find({})
-            // .limit(5)
-            .toArray(function (err, docs) {
-                if (err) {
-                    console.error(err)
-                } else {
-                    // console.log('docs',docs)
-                    res.json(docs)
-                }
-            })
-    } catch (e) {
-        console.error('controllers error', e)
-    }
+
+    let receivedMessages = new Message()
+    let allMessages = await receivedMessages.getAllMessages()
+    // let db = allMessages.db('communications')
+    // let collection = db.collection('messages')
+    allMessages
+        .find({})
+        .toArray((err, docs) => {
+            if (err) {
+                console.error('error from controllers', err)
+            } else {
+                res.json(docs)
+            }
+        })
 }
 
 

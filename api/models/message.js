@@ -15,7 +15,26 @@ module.exports = class Message {
             //     ref: 'Subscribe'
             // }
         }
+        this.connection = get().db('communications').collection('messages');
     }
+
+    async updateMessage() {
+        try {
+            // await this.connection.findByIdAndRemove(id).exec();
+            return this.connection
+        } catch (e) {
+            console.error(e, 'deleting error in models')
+        }
+    };
+
+    async deleteMessage() {
+        try {
+            // await this.connection.findByIdAndRemove(id).exec();
+            return this.connection
+        } catch (e) {
+            console.error(e, 'deleting error in models')
+        }
+    };
 
     async createMessage({ _id, name, message, timeStamp, communication, sid, author }) {
         this.data = {
@@ -29,40 +48,22 @@ module.exports = class Message {
             author: author
         }
 
-        let client = await get();
-        let db = client.db('communications').collection('messages');
+        // let db = this.connection.db('communications').collection('messages');
         // let collection = db.collection('messages')
-        db.insertOne(this.data)
+        this.connection.insertOne(this.data)
 
         return this.data
     }
 
     async getAllMessages() {
-        console.log('model is hit')
-        // let client = await get();
-        // let db = client.db('communications').collection('messages');
-        // //connection might be wrong
-        // //look here
-        // //need to send res.json on controllers side
-        // return await db.find({})
+        return this.connection
     }
-
-    // // async load({ }) {
-    // //return result
-    // // }
-
-
-    // //update sid and delivery status? 
-    // //create function
-
-    // //get function
-
-    // //delete function
-
-    // //put function
-
-    // //read function
-    // //sentTime function
-    // //delivered time function
-    // //etc. but probably not as important
 }
+        // //update sid and delivery status?
+        // //create function
+
+        // //get function
+
+        // //delete function
+
+        // //put function

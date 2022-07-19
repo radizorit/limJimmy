@@ -1,4 +1,5 @@
 const { get } = require('../adapters/mongoConnection')
+let ObjectId = require('mongodb').ObjectId;
 const bcrypt = require('bcrypt')
 
 module.exports = class User {
@@ -27,8 +28,12 @@ module.exports = class User {
         try {
             //given login, find the user and set it to "userInfo"
             let userResult = await this.connection.find({ login: login }).toArray()
+            if (userResult[0] === undefined) return false
+
+            let uniqueId = userResult[0]['_id'].toHexString()
+
             let bcryptResult = await bcrypt.compare(password, userResult[0]['password'])
-            return bcryptResult
+            return [bcryptResult, uniqueId]
         } catch (e) {
             console.log('password is not a match')
         }

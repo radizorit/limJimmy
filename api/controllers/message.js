@@ -1,7 +1,10 @@
 const Message = require('../models/message');
 const sendTwilio = require('../adapters/twilio')
+const cloudVision = require('../adapters/cloudVision')
+
 const { messageSchema } = require('../helpers/validationSchema');
 const { ObjectId } = require('mongodb');
+
 
 module.exports.updateMessage = async (req, res) => {
     try {
@@ -22,7 +25,8 @@ module.exports.updateMessage = async (req, res) => {
                 timeStamp: req.body.timeStamp,
                 sid: req.body.sid,
                 status: req.body.status,
-                author: req.body.author
+                author: req.body.author,
+                image: req.body.image
             }
         });
         console.log('update completed from controllers')
@@ -43,7 +47,7 @@ module.exports.deleteMessage = async (req, res) => {
 }
 
 module.exports.createMessage = async (req, res) => {
-    let message = req.body, twilioMsg, postMessage
+    let message = req.body, twilioMsg, postMessage, cloudVisionResults, twilioMessageInput
     const { error } = messageSchema.validate(req.body);
 
     if (error) {
@@ -52,22 +56,31 @@ module.exports.createMessage = async (req, res) => {
     }
 
     try {
-        twilioMsg = await sendTwilio(message)
+        cloudVisionResults = await cloudVision(message)
+        twilioMessageInput = message.message + ' cloudVisionResults ' + cloudVisionResults
+    } catch (e) {
+        console.log('problems with the cloud vision in controller', e)
+    }
+    // console.log(cloudVisionResults, 'cloudVision')
+    try {
+        twilioMsg = await sendTwilio(twilioMessageInput)
     } catch (e) {
         console.log('problems with the sending twilio in controller', e)
     }
+
     //Message should be a ADAPTER connection
     try {
         postMessage = new Message()
         await postMessage.createMessage({
             id: message._id,
             name: message.name,
-            message: message.message,
+            message: message.message + ' ' + cloudVisionResults,
             communication: message.communication,
             timeStamp: message.timeStamp,
             sid: twilioMsg['sid'],
             status: message.status,
-            author: message.author
+            author: message.author,
+            image: message.image
         })
     } catch (e) {
         console.error('error for creating message', e)

@@ -10,17 +10,11 @@ module.exports.loginUser = async (req, res) => {
             login: user.login,
             password: user.password
         })
-        if (authenticationResult) {
-            // res.send()
-            console.log('correct password send the response somewhere back')
-            // res.redirect('/communications')
-            res.send(req.body)
-            //res.redirect to id
+        if (authenticationResult[0] === undefined) {
+            res.send(false)
         } else {
-            //res.redirect to homepage?
-            console.log('wrong password')
+            res.send(authenticationResult[1])
         }
-
     } catch (e) {
         console.error(e, 'controllers unable to login')
     }

@@ -1,5 +1,6 @@
 const { get } = require('../adapters/mongoConnection')
 module.exports.updateTwilioSms = async (req, res) => {
+    // console.log(req.body, 'twilioWebhook')
     if (req.body['MessageStatus'] === 'delivered') {
         try {
             let client = await get();

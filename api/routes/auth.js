@@ -7,3 +7,5 @@ const {
 
 router.route('/api/1/communications/login')
     .post(loginUser)
+
+module.exports = router

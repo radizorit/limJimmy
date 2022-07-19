@@ -9,7 +9,8 @@ module.exports = class Message {
             timeStamp: Date,
             sid: String,
             status: String,
-            author: String
+            author: String,
+            image: String
             // author: {
             //     type: Schema.Types.ObjectId,
             //     ref: 'Subscribe'
@@ -36,7 +37,7 @@ module.exports = class Message {
         }
     };
 
-    async createMessage({ _id, name, message, timeStamp, communication, sid, author }) {
+    async createMessage({ _id, name, message, timeStamp, communication, sid, author, image }) {
         this.data = {
             _id: _id,
             name: name,
@@ -45,14 +46,16 @@ module.exports = class Message {
             timeStamp: timeStamp,
             sid: sid,
             status: 'queue',
-            author: author
+            author: author,
+            image: image
+        }
+        try {
+            this.connection.insertOne(this.data)
+            return this.data
+        } catch (e) {
+            console.error(e, 'models')
         }
 
-        // let db = this.connection.db('communications').collection('messages');
-        // let collection = db.collection('messages')
-        this.connection.insertOne(this.data)
-
-        return this.data
     }
 
     async getAllMessages() {

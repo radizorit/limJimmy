@@ -7,5 +7,6 @@ module.exports.messageSchema = Joi.object({
     communication: Joi.string().min(1).required(),
     timeStamp: Joi.date(),
     sid: Joi.string(),
-    status: Joi.string()
+    status: Joi.string(),
+    image: Joi.string()
 })

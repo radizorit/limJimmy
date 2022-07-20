@@ -3,7 +3,7 @@ const vision = require('@google-cloud/vision');
 
 module.exports = async function cloudVision(image) {
     const client = new vision.ImageAnnotatorClient();
-    const fileName = '../sign_text.png'
+    const fileName = `../../limJimmy/Image/${image.name}.jpg`
     // Performs text detection on the local file
     const [result] = await client.textDetection(fileName);
     const detections = result.textAnnotations;

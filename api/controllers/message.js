@@ -1,6 +1,7 @@
 const Message = require('../models/message');
 const sendTwilio = require('../adapters/twilio')
 const cloudVision = require('../adapters/cloudVision')
+const downloadImage = require('../adapters/downloadImage')
 
 const { messageSchema } = require('../helpers/validationSchema');
 const { ObjectId } = require('mongodb');
@@ -46,6 +47,7 @@ module.exports.deleteMessage = async (req, res) => {
     }
 }
 
+
 module.exports.createMessage = async (req, res) => {
     let message = req.body, twilioMsg, postMessage, cloudVisionResults, twilioMessageInput
     const { error } = messageSchema.validate(req.body);
@@ -56,12 +58,18 @@ module.exports.createMessage = async (req, res) => {
     }
 
     try {
+        await downloadImage(message.image, message.name)
+    } catch (e) {
+        console.log('problems with downloading the image', e)
+    }
+
+    try {
         cloudVisionResults = await cloudVision(message)
         twilioMessageInput = message.message + ' cloudVisionResults ' + cloudVisionResults
     } catch (e) {
         console.log('problems with the cloud vision in controller', e)
     }
-    // console.log(cloudVisionResults, 'cloudVision')
+
     try {
         twilioMsg = await sendTwilio(twilioMessageInput)
     } catch (e) {
@@ -74,7 +82,7 @@ module.exports.createMessage = async (req, res) => {
         await postMessage.createMessage({
             id: message._id,
             name: message.name,
-            message: message.message + ' ' + cloudVisionResults,
+            message: twilioMessageInput,
             communication: message.communication,
             timeStamp: message.timeStamp,
             sid: twilioMsg['sid'],

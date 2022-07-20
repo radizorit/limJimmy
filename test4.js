@@ -5,7 +5,7 @@ async function cloudVisionary() {
     // Creates a client
     const client = new vision.ImageAnnotatorClient();
 
-    const fileName = 'sign_text.png'
+    const fileName = './Image/TESTING25.jpg'
 
     // Performs text detection on the local file
     const [result] = await client.textDetection(fileName);

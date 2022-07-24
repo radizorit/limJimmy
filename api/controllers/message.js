@@ -1,23 +1,15 @@
 const Message = require('../models/message');
 const sendTwilio = require('../adapters/twilio')
 const cloudVision = require('../adapters/cloudVision')
-const downloadImage = require('../adapters/downloadImage')
 
 const { messageSchema } = require('../helpers/validationSchema');
 const { ObjectId } = require('mongodb');
 
-
 module.exports.updateMessage = async (req, res) => {
     try {
-        console.log(req.body, 'body')
-
         let id = req.params.id
-        // console.log(id)
         let message = new Message()
         let connection = await message.updateMessage()
-
-        // await connection.updateOne({ _id: ObjectId(id) }, { $set: { name: req.body.name } });
-        //basically you just have to identify the front end which is what is req.body.name or equivalent to it? so probably consoel.log(req.params. lol)
         await connection.updateOne({ _id: ObjectId(id) }, {
             $set: {
                 name: req.body.name,
@@ -58,13 +50,7 @@ module.exports.createMessage = async (req, res) => {
     }
 
     try {
-        await downloadImage(message.image, message.name)
-    } catch (e) {
-        console.log('problems with downloading the image', e)
-    }
-
-    try {
-        cloudVisionResults = await cloudVision(message)
+        cloudVisionResults = await cloudVision(message.image)
         twilioMessageInput = message.message + ' cloudVisionResults ' + cloudVisionResults
     } catch (e) {
         console.log('problems with the cloud vision in controller', e)

@@ -24,7 +24,7 @@ module.exports.updateMessage = async (req, res) => {
         });
         console.log('update completed from controllers')
     } catch (e) {
-        console.error(e, 'controllers error deleting')
+        console.error(e, 'controllers error updating')
     }
 }
 
